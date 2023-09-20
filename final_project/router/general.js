@@ -45,12 +45,18 @@ public_users.get('/title/:title',function (req, res) {
     let filterbooks = booksArray.filter((bk)=> {
         return bk.title == title
     });
-    return res.status(300).json({message: `books with the author ${title}`, books: filterbooks});   
+    return res.status(300).json({message: `books with the title ${title}`, books: filterbooks});   
 });
 
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
-  
+  let isbn = req.params.isbn;
+  let booksArray = Object.values(books);
+  let filterbook = booksArray.filter((bk)=> {
+      return bk.isbn == isbn
+  });
+//   console.log("filterbook.reviews", filterbook)
+  return res.status(300).json({message: `books reviews with book isbn ${isbn}`, reviews: filterbook.reviews});   
 });
 
 module.exports.general = public_users;
