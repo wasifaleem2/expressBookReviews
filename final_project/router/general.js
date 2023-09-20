@@ -23,7 +23,7 @@ public_users.get('/isbn/:isbn',function (req, res) {
     let isbn = req.params.isbn;
     let booksArray = Object.values(books);
     let filterBook = booksArray.filter((bk)=> {
-        return bk.author == isbn;
+        return bk.isbn == isbn;
     })
     return res.status(300).json({message: `heres the book with the isbn: ${isbn}`, book:filterBook});
  });
