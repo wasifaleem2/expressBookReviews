@@ -2,6 +2,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 let books = require("./booksdb.js");
 const regd_users = express.Router();
+let secret_key = "i_am_a_developer"
 
 let users = [{ username: 'wasif', password: 'wasif' }];
 
@@ -25,8 +26,8 @@ regd_users.post("/login", (req,res) => {
         res.status(200).json({message: "username or password is incorrect. Please Try Again!"})
     }
     else{
-        // const token = jwt.sign(matchedUser, jwtSecretKey);
-        res.status(200).json({message: "Login Successful!"})
+        const token = jwt.sign(matchedUser, secret_key);
+        res.status(200).json({message: "Login Successful!", username: matchedUser.username, token, token})
     }
     
 });
