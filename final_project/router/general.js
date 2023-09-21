@@ -61,7 +61,12 @@ public_users.get('/isbn/:isbn',function (req, res) {
         
     })
     isbnBookPromise.then((result)=>{
-        return res.status(300).json({message: `books with the isbn ${isbn}`, books: result});
+        if(result.length == 0){
+            return res.status(300).json({message: `no book with the isbn ${isbn} / wrong isbn number`});
+        }
+        else{
+            return res.status(300).json({message: `books with the isbn ${isbn}`, books: result});
+        }
     })
     isbnBookPromise.catch((error)=>{
         return res.status(500).json({message: `Server error, unable to get`});
@@ -85,7 +90,12 @@ public_users.get('/author/:author',function (req, res) {
         
     })
     authorBookPromise.then((result)=>{
-        return res.status(300).json({message: `books with the author ${author}`, books: result});
+        if(result.length == 0){
+            return res.status(300).json({message: `no books with author name: ${author}`});
+        }
+        else{
+            return res.status(300).json({message: `books with the author ${author}`, books: result});
+        }
     })
     authorBookPromise.catch((error)=>{
         return res.status(500).json({message: `serevr error`});
@@ -109,7 +119,12 @@ public_users.get('/title/:title',function (req, res) {
         
     })
     titleBookPromise.then((result)=>{
-        return res.status(300).json({message: `books with the title ${title}`, books: result});
+        if(result.length == 0){
+            return res.status(300).json({message: `no books with the title: ${title}`});
+        }
+        else{
+            return res.status(300).json({message: `books with the title ${title}`, books: result});
+        }
     })
     titleBookPromise.catch((error)=>{
         return res.status(500).json({message: `Server error, unable to get`});
