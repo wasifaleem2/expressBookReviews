@@ -11,7 +11,7 @@ const isValid = (username)=>{ //returns boolean
 return new Promise((resolve, reject)=>{
         try{
             let usernameExist = users.find((u)=>{
-                return u?.username == username;
+                return u?.username.toLowerCase() == username.toLowerCase();
             })
             if(usernameExist){
                 resolve(true);
