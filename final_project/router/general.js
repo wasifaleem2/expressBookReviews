@@ -5,16 +5,12 @@ let users = require("./auth_users.js").users;
 const public_users = express.Router();
 
 
-public_users.post("/register", (req,res) => {
+public_users.post("/register", async (req,res) => {
     //Write your code here
     let username = req.body.username;
     let password = req.body.password;
-    let filterUser = users.filter((u)=>{
-        return u?.username == username;
-    })
-    console.log(filterUser)
-    if(filterUser.length > 0){
-        console.log(filterUser)
+    let userExist = await isValid(username)
+    if(userExist){
         res.status(404).json({message: "User already exist with this username"})
     }
     else{

@@ -8,6 +8,22 @@ let users = [{ username: 'wasif', password: 'wasif' }];
 
 const isValid = (username)=>{ //returns boolean
 //write code to check is the username is valid
+return new Promise((resolve, reject)=>{
+        try{
+            let usernameExist = users.find((u)=>{
+                return u?.username == username;
+            })
+            if(usernameExist){
+                resolve(true);
+            }
+            else{
+                resolve(false);
+            }
+        }
+        catch(error){
+            reject(error)
+        }
+    })
 }
 
 const authenticatedUser = (username,password)=>{ //returns boolean
