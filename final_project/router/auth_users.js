@@ -12,22 +12,42 @@ const isValid = (username)=>{ //returns boolean
 
 const authenticatedUser = (username,password)=>{ //returns boolean
 //write code to check if username and password match the one we have in records.
+    return new Promise((resolve, reject)=>{
+        try{
+            let verifyUser = users.find((u)=>{
+                return u.username == username && u.password == password
+            })
+            resolve(verifyUser);
+        }
+        catch(error){
+            reject(error)
+        }
+    })
 }
 
 //only registered users can login
-regd_users.post("/login", (req,res) => {
+regd_users.post("/login", async (req,res) => {
     let username = req.body.username;
     let password = req.body.password;
-    let matchedUser = users.find((u)=>{
-        return u.username == username && u.password == password
-    })
-    console.log("matchedUser", matchedUser)
-    if(!matchedUser){
-        res.status(200).json({message: "username or password is incorrect. Please Try Again!"})
+    if(!username || !password){
+        res.status(300).json({message: "Please! provide username and password to login."}) 
     }
-    else{
-        const token = jwt.sign(matchedUser, secret_key);
-        res.status(200).json({message: "Login Successful!", username: matchedUser.username, token, token})
+    try{
+        let matchedUser = await authenticatedUser(username, password); 
+        console.log("login user matched", matchedUser)
+        if(!matchedUser){
+            res.status(200).json({message: "username or password is incorrect. Please Try Again!"})
+        }
+        else{
+            const token = jwt.sign(matchedUser, secret_key);
+            req.session.authorization = {
+                token
+            }
+            res.status(200).json({message: "Login Successful!", username: matchedUser.username, token, token})
+        }
+    }
+    catch(error){
+        res.status(500).json({message: "Server Error"})
     }
     
 });
