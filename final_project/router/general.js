@@ -10,10 +10,10 @@ public_users.post("/register", (req,res) => {
     let username = req.body.username;
     let password = req.body.password;
     let filterUser = users.filter((u)=>{
-        return u.username == username;
+        return u?.username == username;
     })
     console.log(filterUser)
-    if(filterUser){
+    if(filterUser.length > 0){
         console.log(filterUser)
         res.status(404).json({message: "User already exist with this username"})
     }
