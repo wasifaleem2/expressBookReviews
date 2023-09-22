@@ -71,12 +71,12 @@ regd_users.post("/login", async (req,res) => {
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
     // Write your code here
-    let username = req.body.username;
+    let username = req.user.username;
     let review = req.body.review;
     let isbn = req.params.isbn;
     let booksArray = Object.values(books);
     let filterBook = booksArray.find((bk)=> {
-        return bk.isbn == isbn
+        return bk.author == isbn
     });
     filterBook["reviews"][username] = review;
     return res.status(300).json({books});
