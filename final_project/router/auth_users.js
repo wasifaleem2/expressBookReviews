@@ -57,7 +57,7 @@ regd_users.post("/login", async (req,res) => {
         else{
             const token = jwt.sign(matchedUser, secret_key);
             req.session.authorization = {
-                token
+                token: token
             }
             res.status(200).json({message: "Login Successful!", username: matchedUser.username, token, token})
         }
@@ -70,16 +70,22 @@ regd_users.post("/login", async (req,res) => {
 
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
-  //Write your code here
-    let review = req.query.review;
-    let isbn = req.query.isbn;
-    let booksArray = Object.values(books);
-    let check = booksArray.filter((book)=>{
-            if(book.isbn == isbn){
-                
-                return book.reviews == isbn
-            }
-    })
+    // Write your code here
+    // let review = req.query.review;
+    // let isbn = req.query.isbn;
+    // let booksArray = Object.values(books);
+    // let check = booksArray.filter((book)=>{
+    //         if(book.author == isbn){
+    //             console.log("book", book)
+    //             let reviewsArray = Object.values(book.reviews)
+    //             reviewsArray.find((rev) =>{
+    //                 console.log("review", review)
+    //                 return rev.username == req.user.username
+    //             })
+    //             // return book.reviews == isbn
+    //         }
+    // })
+    // console.log("check",check)
 //   if()
     return res.status(300).json({message: "Yet to be implemented"});
 });
