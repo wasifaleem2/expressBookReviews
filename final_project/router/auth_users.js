@@ -76,7 +76,7 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
     let isbn = req.params.isbn;
     let booksArray = Object.values(books);
     let filterBook = booksArray.find((bk)=> {
-        return bk.author == isbn
+        return bk.isbn == isbn
     });
     filterBook["reviews"][username] = review;
     return res.status(300).json({books});
