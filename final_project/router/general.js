@@ -5,16 +5,12 @@ let users = require("./auth_users.js").users;
 const public_users = express.Router();
 
 
-public_users.post("/register", (req,res) => {
+public_users.post("/register", async (req,res) => {
     //Write your code here
     let username = req.body.username;
     let password = req.body.password;
-    let filterUser = users.filter((u)=>{
-        return u?.username == username;
-    })
-    console.log(filterUser)
-    if(filterUser.length > 0){
-        console.log(filterUser)
+    let userExist = await isValid(username)
+    if(userExist){
         res.status(404).json({message: "User already exist with this username"})
     }
     else{
@@ -23,42 +19,112 @@ public_users.post("/register", (req,res) => {
     }  
 });
 
+
 // Get the book list available in the shop
-public_users.get('/',function (req, res) {
-  //Write your code here
-  let allBooks = JSON.stringify(books)
-  return res.status(300).json({books: allBooks});
+public_users.get('/',async function (req, res) {
+    let isbnBookPromise = new Promise((resolve, reject)=>{
+        try{
+            let allBooks = JSON.stringify(books)
+            resolve(allBooks)
+        }
+        catch(error){
+            reject(error)
+        }
+        
+    })
+    isbnBookPromise.then((result)=>{
+        return res.status(300).json({message: `List of all avilaible Books`, books: result});
+    })
+    isbnBookPromise.catch((error)=>{
+        return res.status(500).json({message: `Server error, unable to get`});
+    })
 });
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
-    //Write your code here
     let isbn = req.params.isbn;
-    let booksArray = Object.values(books);
-    let filterBook = booksArray.filter((bk)=> {
-        return bk.isbn == isbn;
+    let isbnBookPromise = new Promise((resolve, reject)=>{
+        try{
+            let booksArray = Object.values(books);
+            let filterBook = booksArray.filter((bk)=> {
+                return bk.isbn == isbn;
+            })
+            resolve(filterBook)
+        }
+        catch(error){
+            reject(error)
+        }
+        
     })
-    return res.status(300).json({message: `heres the book with the isbn: ${isbn}`, book:filterBook});
+    isbnBookPromise.then((result)=>{
+        if(result.length == 0){
+            return res.status(300).json({message: `no book with the isbn ${isbn} / wrong isbn number`});
+        }
+        else{
+            return res.status(300).json({message: `books with the isbn ${isbn}`, books: result});
+        }
+    })
+    isbnBookPromise.catch((error)=>{
+        return res.status(500).json({message: `Server error, unable to get`});
+    })
  });
   
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
     let author = req.params.author;
-    let booksArray = Object.values(books);
-    let filterbooks = booksArray.filter((bk)=> {
-        return bk.author == author
-    });
-    return res.status(300).json({message: `books with the author ${author}`, books: filterbooks});
+    let authorBookPromise = new Promise((resolve, reject)=>{
+        try{
+            let booksArray = Object.values(books);
+            let filterbooks = booksArray.filter((bk)=> {
+                return bk.author == author
+            });
+            resolve(filterbooks)
+        }
+        catch(error){
+            reject(error)
+        }
+        
+    })
+    authorBookPromise.then((result)=>{
+        if(result.length == 0){
+            return res.status(300).json({message: `no books with author name: ${author}`});
+        }
+        else{
+            return res.status(300).json({message: `books with the author ${author}`, books: result});
+        }
+    })
+    authorBookPromise.catch((error)=>{
+        return res.status(500).json({message: `serevr error`});
+    })
 });
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
     let title = req.params.title;
-    let booksArray = Object.values(books);
-    let filterbooks = booksArray.filter((bk)=> {
-        return bk.title == title
-    });
-    return res.status(300).json({message: `books with the title ${title}`, books: filterbooks});   
+    let titleBookPromise = new Promise((resolve, reject)=>{
+        try{
+            let booksArray = Object.values(books);
+            let filterbooks = booksArray.filter((bk)=> {
+                return bk.title == title
+            });
+            resolve(filterbooks)
+        }
+        catch(error){
+            reject(error)
+        }
+        
+    })
+    titleBookPromise.then((result)=>{
+        if(result.length == 0){
+            return res.status(300).json({message: `no books with the title: ${title}`});
+        }
+        else{
+            return res.status(300).json({message: `books with the title ${title}`, books: result});
+        }
+    })
+    titleBookPromise.catch((error)=>{
+        return res.status(500).json({message: `Server error, unable to get`});
+    })
 });
 
 //  Get book review
