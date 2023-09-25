@@ -4,7 +4,7 @@ let books = require("./booksdb.js");
 const regd_users = express.Router();
 let secret_key = "access"
 
-let users = [{ username: 'wasif', password: 'wasif' }];
+let users = [{username: "Wasif", password:"test123"}];
 
 const isValid = (username)=>{ //returns boolean
 //write code to check is the username is valid
@@ -79,7 +79,7 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
         return bk.isbn == isbn
     });
     filterBook["reviews"][username] = review;
-    return res.status(300).json({books});
+    return res.status(300).json({message:"your review added", book:filterBook.title, review:review});
 });
 
 module.exports.authenticated = regd_users;
