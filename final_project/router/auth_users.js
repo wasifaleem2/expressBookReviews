@@ -82,6 +82,19 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
     return res.status(300).json({message:"your review added", book:filterBook.title, review:review});
 });
 
+// Delete a book review
+regd_users.delete("/auth/review/:isbn", (req, res) => {
+    // Write your code here
+    let username = req.user.username;
+    let isbn = req.params.isbn;
+    let booksArray = Object.values(books);
+    let filterBook = booksArray.find((bk)=> {
+        return bk.isbn == isbn
+    });
+    delete filterBook.reviews[username]
+    return res.status(300).json({message:"review deleted", book:filterBook.title});
+});
+
 module.exports.authenticated = regd_users;
 module.exports.isValid = isValid;
 module.exports.users = users;
